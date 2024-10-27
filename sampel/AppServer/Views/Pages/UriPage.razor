@@ -1,0 +1,41 @@
+﻿@page "/uri-page/{Alies}/"
+
+<PageTitle>Uri Page</PageTitle>
+
+<div class="row pt-5">
+    <div class="col-12">
+        <h1 class="mb-3">Uri Page</h1>
+    </div>
+
+    <div class="col-12">
+        <span class="text-danger">@Id</span>
+        <span class="text-danger">@Name</span>
+    </div>
+
+    <div class="col-12">
+        <span class="text-info">@QParam</span>
+    </div>
+
+</div>
+@code {
+    [Parameter]
+    public string Alies { get; set; }
+
+    [SupplyParameterFromQuery(Name = "q")]
+    public string QParam { get; set; }
+
+
+
+
+    private int? Id { get; set; }
+    private string Name { get; set; }
+    protected override Task OnParametersSetAsync()
+    {
+        var tmp = Alies.Split("-");
+
+        Id = int.Parse(tmp[0]);
+        Name = tmp[1] + " " + tmp[2];
+
+        return base.OnParametersSetAsync();
+    }
+}

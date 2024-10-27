@@ -1,0 +1,44 @@
+﻿@page "/data-binding"
+
+<PageTitle>Data Binding</PageTitle>
+
+<div class="row pt-5">
+    <div class="col-12">
+        <h1 class="mb-3">Data Binding</h1>
+    </div>
+
+    <div class="col-12 mb-5">
+        One Way : @OneWay
+    </div>
+
+    <div class="col-12 mb-5">
+        <p>Two Way : @TwoWay</p>
+        <input @bind="TwoWay" />
+    </div>
+
+    <div class="col-12 mb-5">
+        <p>Event Binding : @Count</p>
+        <button @onclick="OnClickIncrement">Click me</button>
+    </div>
+
+</div>
+@code {
+    // Form Binding
+    // List Data Binding
+    public int Count { get; set; }
+    public string OneWay { get; set; }
+    public string TwoWay { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        OneWay = "Pusula";
+
+        await Task.CompletedTask;
+    }
+
+
+    private void OnClickIncrement()
+    {
+        Count++;
+    }
+}

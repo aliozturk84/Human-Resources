@@ -1,0 +1,70 @@
+﻿<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+
+        <NavLink Match="NavLinkMatch.All" class="navbar-brand" href="/">Pusula Talent Academy</NavLink>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="navbar-collapse collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav mb-2 mb-lg-0 me-auto">
+
+                <li class="nav-item"><NavLink ActiveClass="link-danger" class="nav-link" href="/crud">Crud Page</NavLink></li>
+                <li class="nav-item"><NavLink ActiveClass="link-danger" class="nav-link" href="/file-manager">File Manager</NavLink></li>
+                <li class="nav-item"><NavLink ActiveClass="link-danger" class="nav-link" href="/uri-page/5-sampel-post">Uri Page</NavLink></li>
+                <li class="nav-item"><NavLink ActiveClass="link-danger" class="nav-link" href="/log-page">Log Page</NavLink></li>
+                <li class="nav-item"><NavLink ActiveClass="link-danger" class="nav-link" href="/lifecycle">Lifecycle</NavLink></li>
+                <li class="nav-item"><NavLink ActiveClass="link-danger" class="nav-link" href="/data-binding">Data Binding</NavLink></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="@($"nav-link dropdown-toggle {(IsActive() ? "link-danger" : string.Empty)}")" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Components
+                    </a>
+
+
+                    <ul class="dropdown-menu">
+                        <li><NavLink ActiveClass="link-danger" class="dropdown-item" href="/components/first">Component First</NavLink></li>
+                        <li><NavLink ActiveClass="link-danger" class="dropdown-item" href="/components/button">Component Button</NavLink></li>
+                        <li><NavLink ActiveClass="link-danger" class="dropdown-item" href="/components/button-variant">Component Button Variant</NavLink></li>
+                    </ul>
+                </li>
+
+            </ul>
+
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+
+        </div>
+
+    </div>
+</nav>
+
+
+@implements IDisposable
+@inherits AppComponentBase
+@inject NavigationManager navigationManager
+@code {
+
+
+    protected override void OnInitialized()
+    {
+        navigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        navigationManager.LocationChanged -= OnLocationChanged;
+    }
+
+    private bool IsActive()
+    {
+        return navigationManager.Uri.Contains("first") || navigationManager.Uri.Contains("button") || navigationManager.Uri.Contains("variant");
+    }
+}

@@ -1,0 +1,18 @@
+﻿@page "/log-page"
+
+<PageTitle>Log Page</PageTitle>
+
+<div class="row pt-5">
+    <div class="col">
+        <h1 class="mb-3">Log Page</h1>
+    </div>
+</div>
+
+@inject ILogger<LogPage> Logger
+@code {
+    protected override Task OnInitializedAsync()
+    {
+        Logger.LogWarning("Log Page");
+        return base.OnInitializedAsync();
+    }
+}

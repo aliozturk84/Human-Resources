@@ -1,0 +1,29 @@
+﻿@page "/components/button"
+
+<PageTitle>Component Button</PageTitle>
+
+<div class="row pt-5">
+    <div class="col">
+        <h1 class="mb-3">Component Button</h1>
+
+        <PspButton CssClass="btn btn-secondary position-relative" OnClick="OnClick">
+            Click me
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                @(Count)+
+            </span>
+        </PspButton>
+    </div>
+</div>
+@code {
+    public int Count { get; set; }
+
+    private void OnClick(PspMouseEventArgs args)
+    {
+        Count = args.Count;
+    }
+
+    protected override Task OnParametersSetAsync()
+    {
+        return base.OnParametersSetAsync();
+    }
+}

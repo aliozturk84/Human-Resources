@@ -1,0 +1,129 @@
+﻿@page "/crud"
+@implements IAsyncDisposable
+@inject IJSRuntime jsRuntime
+@inject IDbContextFactory<PspDbContext> DbFactory
+
+<PageTitle>CRUD Page</PageTitle>
+<HeadContent>
+    <link href="AppServer.styles.css" rel="stylesheet">
+</HeadContent>
+
+<div class="row pt-5">
+    <div class="col">
+        <h1 class="mb-3">
+            <span class="title">CRUD Page</span>
+            <PspButton CssClass="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create">
+                New
+            </PspButton>
+        </h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <QuickGrid Class="table-striped table-hover table" Items="@dbContext.Users" @ref="RefGrid">
+
+            <TemplateColumn Title="Full Name" Context="user">
+                @string.Format("{0} {1}", user.Name, user.Surname)
+            </TemplateColumn>
+
+            <PropertyColumn Property="user => user.Mail" />
+
+            <PropertyColumn Property="user => user.Country" />
+
+            <TemplateColumn Context="user">
+                <PspButtonDelete OnDelete="@(async ()=> await OnDeleteAsync(user.Id))" />
+                <PspButtonUpdate OnUpdate="@(async ()=> await OnShowAsync(user.Id))" />
+            </TemplateColumn>
+
+        </QuickGrid>
+    </div>
+</div>
+
+<div class="modal fade" id="create" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">User Create Modal</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <EditForm method="post" Model="CreateModel" OnValidSubmit="OnCreateAsync" FormName="create" Enhance>
+                <div class="modal-body">
+                    <DataAnnotationsValidator />
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name:</label>
+                        <InputText id="name" @bind-Value="CreateModel.Name" class="form-control" />
+                        <ValidationMessage For="() => CreateModel.Name" class="text-danger" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="surname" class="form-label">Surname:</label>
+                        <InputText id="surname" @bind-Value="CreateModel.Surname" class="form-control" />
+                        <ValidationMessage For="() => CreateModel.Surname" class="text-danger" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="mail" class="form-label">Mail:</label>
+                        <InputText id="mail" @bind-Value="CreateModel.Mail" class="form-control" />
+                        <ValidationMessage For="() => CreateModel.Mail" class="text-danger" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="country" class="form-label">Country:</label>
+                        <InputText id="country" @bind-Value="CreateModel.Country" class="form-control" />
+                        <ValidationMessage For="() => CreateModel.Country" class="text-danger" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </EditForm>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="update" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">User Update Modal</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <EditForm method="post" Model="UpdateModel" OnValidSubmit="OnUpdateAsync" FormName="update" Enhance>
+                <div class="modal-body">
+                    <DataAnnotationsValidator />
+                    <input type="hidden" name="UpdateModel.Id" value="@UpdateModel.Id" />
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name:</label>
+                        <InputText id="name" @bind-Value="UpdateModel.Name" class="form-control" />
+                        <ValidationMessage For="() => UpdateModel.Name" class="text-danger" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="surname" class="form-label">Surname:</label>
+                        <InputText id="surname" @bind-Value="UpdateModel.Surname" class="form-control" />
+                        <ValidationMessage For="() => UpdateModel.Surname" class="text-danger" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="mail" class="form-label">Mail:</label>
+                        <InputText id="mail" @bind-Value="UpdateModel.Mail" class="form-control" />
+                        <ValidationMessage For="() => UpdateModel.Mail" class="text-danger" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="country" class="form-label">Country:</label>
+                        <InputText id="country" @bind-Value="UpdateModel.Country" class="form-control" />
+                        <ValidationMessage For="() => UpdateModel.Country" class="text-danger" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </EditForm>
+
+        </div>
+    </div>
+</div>
+
+<PspConfirm @ref="confirm" />

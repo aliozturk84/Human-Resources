@@ -1,0 +1,40 @@
+﻿@page "/file-manager"
+
+<PageTitle>File Manager</PageTitle>
+
+<div class="row pt-5">
+    <div class="col-12">
+        <h1 class="mb-3">File Manager</h1>
+    </div>
+    <div class="col-12">
+        Component: @fileStateContainer.Component
+    </div>
+    <div class="col-8">
+        <PspMediaList />
+    </div>
+    <div class="col-4">
+        <PspMediaUpload />
+    </div>
+</div>
+
+@implements IDisposable
+@inject FileStateContainer fileStateContainer
+@code {
+    protected override void OnInitialized()
+    {
+        fileStateContainer.OnChange += StateHasChanged;
+        if (!fileStateContainer.Data.Any(x => x.Name == "Resim1.jpg"))
+        {
+            fileStateContainer.AddData(new()
+                {
+                    Name = "Resim1.jpg",
+                    Path = "/Media/Resim1.jpg"
+                }, "FileManager");
+        }
+    }
+
+    public void Dispose()
+    {
+        fileStateContainer.OnChange -= StateHasChanged;
+    }
+}

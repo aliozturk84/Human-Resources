@@ -1,0 +1,34 @@
+﻿@foreach (var item in fileStateContainer.Data)
+{
+    <div class="d-flex mt-3">
+        <div class="flex-shrink-0">
+            <img src="@item.Path" width="64" height="64">
+        </div>
+        <div class="flex-grow-1 ms-3">
+            @item.Name
+        </div>
+    </div>
+}
+
+@implements IDisposable
+@inherits AppComponentBase
+@inject FileStateContainer fileStateContainer
+@code {
+    protected override void OnInitialized()
+    {
+        fileStateContainer.OnChange += StateHasChanged;
+        if (!fileStateContainer.Data.Any(x => x.Name == "Resim2.jpg"))
+        {
+            fileStateContainer.AddData(new()
+                {
+                    Name = "Resim2.jpg",
+                    Path = "/Media/Resim2.jpg"
+                }, "PspMediaList");
+        }
+    }
+
+    public void Dispose()
+    {
+        fileStateContainer.OnChange -= StateHasChanged;
+    }
+}

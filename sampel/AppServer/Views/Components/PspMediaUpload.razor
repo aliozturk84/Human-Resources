@@ -1,0 +1,67 @@
+﻿<HeadContent>
+    <script>
+        function resetFileInput(elementId) {
+            var input = document.getElementById(elementId);
+            if (input) {
+                input.value = '';
+            }
+        }
+    </script>
+</HeadContent>
+<InputFile OnChange="OnChange" id="fileInput" />
+<PspButton OnClick="@OnClick">Upload</PspButton>
+
+
+@implements IDisposable
+@inherits AppComponentBase
+@inject IJSRuntime jsRuntime
+@inject IWebHostEnvironment hostEnvironment
+@inject FileStateContainer fileStateContainer
+@code {
+    private IBrowserFile browserFile;
+    public const int MaxFile = 1;
+
+    private void OnChange(InputFileChangeEventArgs args)
+    {
+        browserFile = args.GetMultipleFiles(AppConsts.MaximumFileCount).FirstOrDefault();
+    }
+
+    private async Task OnClick()
+    {
+        if (browserFile != null)
+        {
+            try
+            {
+                var name = Path.GetFileName(browserFile.Name);
+                var savePath = Path.Combine(hostEnvironment.WebRootPath, "Media", browserFile.Name);
+
+
+                await using FileStream fileStream = new(savePath, FileMode.Create);
+                await browserFile.OpenReadStream(maxAllowedSize: AppConsts.MaxAllowedSize).CopyToAsync(fileStream);
+
+
+                fileStateContainer.AddData(new()
+                    {
+                        Name = name,
+                        Path = Path.Combine("/Media/", name)
+                    }, "PspMediaUpload");
+            }
+            finally
+            {
+                await jsRuntime.InvokeVoidAsync("resetFileInput", "fileInput");
+            }
+        }
+    }
+
+
+
+    protected override void OnInitialized()
+    {
+        fileStateContainer.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        fileStateContainer.OnChange -= StateHasChanged;
+    }
+}
