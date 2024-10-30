@@ -1,7 +1,6 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using Pusula.Training.HealthCare.Doctors;
-using Pusula.Training.HealthCare.Doctors;
 using Pusula.Training.HealthCare.Shared;
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Pusula.Training.HealthCare.Departments;
 using Pusula.Training.HealthCare.Doctors;
+using Pusula.Training.HealthCare.Employees;
+using Pusula.Training.HealthCare.HRs;
 using Pusula.Training.HealthCare.Patients;
 using Pusula.Training.HealthCare.Protocols;
 using Pusula.Training.HealthCare.Titles;
@@ -35,6 +37,9 @@ public class HealthCareDbContext :
     public DbSet<Patient> Patients { get; set; } = null!;
     public DbSet<Title> Titles { get; set; } = null!;
     public DbSet<Doctor> Doctors { get; set; } = null!;
+    public DbSet<HR> HRs { get; set; } = null!;
+    public DbSet<Employee> Employees { get; set; } = null!;
+
 
     #region Entities from the modules
 
@@ -136,6 +141,33 @@ public class HealthCareDbContext :
                 b.Property(x => x.PhoneNumber).HasColumnName(nameof(Doctor.PhoneNumber)).IsRequired().HasMaxLength(DoctorConsts.PhoneNumberMaxLength);
                 b.Property(x => x.BirthDate).HasColumnName(nameof(Doctor.BirthDate)).IsRequired();
                 b.Property(x => x.Gender).HasColumnName(nameof(Doctor.Gender));
+                b.HasOne<Department>().WithMany().IsRequired().HasForeignKey(x => x.DepartmentId).OnDelete(DeleteBehavior.NoAction);
+                b.HasOne<Title>().WithMany().IsRequired().HasForeignKey(x => x.TitleId).OnDelete(DeleteBehavior.NoAction);
+            });
+
+            builder.Entity<HR>(b =>
+            {
+                b.ToTable(HealthCareConsts.DbTablePrefix + "HRs", HealthCareConsts.DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.FirstName).HasColumnName(nameof(HR.FirstName)).IsRequired().HasMaxLength(HRConsts.FirstNameMaxLength);
+                b.Property(x => x.LastName).HasColumnName(nameof(HR.LastName)).IsRequired().HasMaxLength(HRConsts.LastNameMaxLength);
+                b.Property(x => x.PhoneNumber).HasColumnName(nameof(HR.PhoneNumber)).IsRequired().HasMaxLength(HRConsts.PhoneNumberMaxLength);
+                b.Property(x => x.BirthDate).HasColumnName(nameof(HR.BirthDate)).IsRequired();
+                b.Property(x => x.Gender).HasColumnName(nameof(HR.Gender));
+                b.HasOne<Department>().WithMany().IsRequired().HasForeignKey(x => x.DepartmentId).OnDelete(DeleteBehavior.NoAction);
+                b.HasOne<Title>().WithMany().IsRequired().HasForeignKey(x => x.TitleId).OnDelete(DeleteBehavior.NoAction);
+            });
+
+            builder.Entity<Employee>(b =>
+            {
+                b.ToTable(HealthCareConsts.DbTablePrefix + "Employees", HealthCareConsts.DbSchema);
+                b.ConfigureByConvention();
+                b.Property(x => x.FirstName).HasColumnName(nameof(Employee.FirstName)).IsRequired().HasMaxLength(EmployeeConsts.FirstNameMaxLength);
+                b.Property(x => x.LastName).HasColumnName(nameof(Employee.LastName)).IsRequired().HasMaxLength(EmployeeConsts.LastNameMaxLength);
+                b.Property(x => x.PhoneNumber).HasColumnName(nameof(Employee.PhoneNumber)).IsRequired().HasMaxLength(EmployeeConsts.PhoneNumberMaxLength);
+                b.Property(x => x.BirthDate).HasColumnName(nameof(Employee.BirthDate)).IsRequired();
+                b.Property(x => x.LeaveDays).HasColumnName(nameof(Employee.LeaveDays)).IsRequired();
+                b.Property(x => x.Salary).HasColumnName(nameof(Employee.Salary)).IsRequired();
                 b.HasOne<Department>().WithMany().IsRequired().HasForeignKey(x => x.DepartmentId).OnDelete(DeleteBehavior.NoAction);
                 b.HasOne<Title>().WithMany().IsRequired().HasForeignKey(x => x.TitleId).OnDelete(DeleteBehavior.NoAction);
             });

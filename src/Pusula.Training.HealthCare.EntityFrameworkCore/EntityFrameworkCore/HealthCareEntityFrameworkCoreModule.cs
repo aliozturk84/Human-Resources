@@ -17,6 +17,8 @@ using Pusula.Training.HealthCare.Protocols;
 using Pusula.Training.HealthCare.Departments;
 using Pusula.Training.HealthCare.Titles;
 using Pusula.Training.HealthCare.Doctors;
+using Pusula.Training.HealthCare.HRs;
+using Pusula.Training.HealthCare.Employees;
 
 namespace Pusula.Training.HealthCare.EntityFrameworkCore;
 
@@ -55,6 +57,8 @@ public class HealthCareEntityFrameworkCoreModule : AbpModule
             options.AddRepository<Department, EfCoreDepartmentRepository>();
             options.AddRepository<Title, EfCoreTitleRepository>();
             options.AddRepository<Doctor, EfCoreDoctorRepository>();
+            options.AddRepository<HR, EfCoreHRRepository>();
+            options.AddRepository<Employee, EfCoreEmployeeRepository>();
         });
 
         Configure<AbpDbContextOptions>(options =>

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Pusula.Training.HealthCare.Departments;
 using Pusula.Training.HealthCare.Doctors;
+using Pusula.Training.HealthCare.Employees;
+using Pusula.Training.HealthCare.HRs;
 using Pusula.Training.HealthCare.Patients;
 using Pusula.Training.HealthCare.Protocols;
 using Pusula.Training.HealthCare.Shared;
@@ -40,5 +42,15 @@ public class HealthCareApplicationAutoMapperProfile : Profile
         CreateMap<Doctor, DoctorExcelDto>();
         CreateMap<Doctor, DoctorWithNavigationPropertiesDto>();
         CreateMap<DoctorWithNavigationProperties, DoctorWithNavigationPropertiesDto>();
+
+        CreateMap<HR, HRDto>();
+        CreateMap<HR, HRExcelDto>();
+        CreateMap<HR, HRWithNavigationPropertiesDto>();
+        CreateMap<HRWithNavigationProperties, HRWithNavigationPropertiesDto>();
+
+        CreateMap<Employee, EmployeeDto>();
+        CreateMap<Employee, EmployeeExcelDto>();
+        CreateMap<Employee, EmployeeWithNavigationPropertiesDto>();
+        CreateMap<EmployeeWithNavigationProperties, EmployeeWithNavigationPropertiesDto>();
     }
 }
